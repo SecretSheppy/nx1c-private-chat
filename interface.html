@@ -41,15 +41,35 @@
         <div class="label-wrapper">
             <label for="username">Server Host</label>
         </div>
-        <input id="server-host" type="text" placeholder="Enter server address" name="server-host" autocomplete="off" required />
+        <div class="server-host-wrapper">
+            <select id="protocol">
+                <option value="http://">http://</option>
+                <option value="https://">https://</option>
+            </select>
+            <input id="server-host" type="text" placeholder="www.example.com" name="server-host" autocomplete="off" required />
+        </div>
         <div class="label-wrapper">
             <label for="username">Username</label>
         </div>
         <input id="username" type="text" placeholder="Enter your username" name="username" autocomplete="off" required />
         <p style="margin-top: 20px">In order to read and send messages in the server you will need to add the servers private encryption key into the privatekeys.json file</p>
         <div class="button-wrapper">
-            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close()" />
+            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
             <input type="submit" value="Connect" onclick="client.connectToServer();" />
+        </div>
+    </div>
+</div>
+<div class="login-wrapper" id="password">
+    <div class="login">
+        <h1>NX1C</h1>
+        <p>Private Chat</p>
+        <div class="label-wrapper">
+            <label for="password-text">Server Password</label>
+        </div>
+        <input id="password-text" type="password" placeholder="Enter server password" name="password" autocomplete="off" required />
+        <div class="button-wrapper">
+            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
+            <input type="submit" value="Connect" onclick="client.submitServerPassword();" />
         </div>
     </div>
 </div>
