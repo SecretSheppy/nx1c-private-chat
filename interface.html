@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="resources/css/style.css">
+    <script type="text/javascript" src="node_modules/socket.io/client-dist/socket.io.js"></script>
+    <script type="text/javascript" src="resources/js/client.js"></script>
+    <script type="text/javascript" src="resources/js/encrypter.js"></script>
+    <script type="text/javascript" src="resources/js/interface.js"></script>
+    <script type="text/javascript">
+        const client = new ClientEnvironment("./config.json");
+    </script>
+    <title>NX1C Private Chat</title>
+</head>
+<body>
+<div class="title-bar">
+    <div class="draggable-area">
+        <img src="resources/images/logo.png">
+        <p>NX1C Private Chat</p>
+    </div>
+    <button class="button" onclick="nw.Window.get().minimize()"><img src="resources/interface/line.png"></button>
+    <button class="button quit" onclick="nw.Window.get().close()"><img src="resources/interface/cross.png"></button>
+</div>
+<div id="alert" class="alert" style="display: none;">
+    <p id="alert-text">Waiting for connection...</p>
+</div>
+<!--Login Screen-->
+<div class="recent-connections" id="recent-connections">
+    <h4>Previous Connections</h4>
+    <div class="connections">
+        <div class="connection" onclick="loadPreviousConnection(this)">
+            <p>Address: http://127.0.0.1:3000/</p>
+            <p>Username: SecretSheppy</p>
+        </div>
+    </div>
+</div>
+<div class="login-wrapper" id="login">
+    <div class="login">
+        <h1>NX1C</h1>
+        <p>Private Chat</p>
+        <div class="label-wrapper">
+            <label for="username">Server Host</label>
+        </div>
+        <input id="server-host" type="text" placeholder="Enter server address" name="server-host" autocomplete="off" required />
+        <div class="label-wrapper">
+            <label for="username">Username</label>
+        </div>
+        <input id="username" type="text" placeholder="Enter your username" name="username" autocomplete="off" required />
+        <p style="margin-top: 20px">In order to read and send messages in the server you will need to add the servers private encryption key into the privatekeys.json file</p>
+        <div class="button-wrapper">
+            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close()" />
+            <input type="submit" value="Connect" onclick="client.connectToServer();" />
+        </div>
+    </div>
+</div>
+<!--Chat Screen-->
+<div id="chat" class="chat" style="display: none;">
+    <div class="chat-wrapper" id="message-list">
+    </div>
+    <div class="chat-content-info">
+        <p id="message-characters">Message Characters: 0/500</p>
+    </div>
+    <div class="chat-box">
+        <input id="message-box" type="text" placeholder="Enter message">
+        <input type="submit" value="Send" onclick="client.sendMessage()">
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    let messageBoxElement = document.getElementById("message-box");
+    let messageCharactersElement = document.getElementById("message-characters");
+    messageBoxElement.addEventListener("keydown", (event) => {
+        messageCharactersElement.innerText = "Message Characters: " + messageBoxElement.value.length + "/500";
+        if (messageBoxElement.value.length > 500) {
+            messageCharactersElement.style.color = "red";
+        } else {
+            messageCharactersElement.style.color = "var(--footer-bgcolor)";
+        }
+        if (event.key === "Enter") {
+            client.sendMessage();
+        }
+    });
+</script>
+</html>
