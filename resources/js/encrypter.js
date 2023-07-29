@@ -44,7 +44,7 @@ function generateRandomPublicKey (length) {
  * Generates a random private key
  * @returns {string}
  */
-exports.generateRandomPrivateKey = function (repeatLength) {
+function generateRandomPrivateKey (repeatLength) {
     return generateRandomPublicKey(repeatLength);
 }
 
@@ -84,6 +84,9 @@ function scalePrivateKey (publicKeyLength, privateKey) {
             positionCounter = 0;
         }
     }
+    while (publicKeyLength < scaledPrivateKey.length) {
+        scaledPrivateKey = scaledPrivateKey.slice(0, scaledPrivateKey.length - 1);
+    }
     return scaledPrivateKey;
 }
 
@@ -93,7 +96,7 @@ function scalePrivateKey (publicKeyLength, privateKey) {
  * @param {string} data
  * @returns {string}
  */
-exports.encrypt = function (privateKey, data) {
+function encrypt (privateKey, data) {
     let publicKey = generateRandomPublicKey(data.length);
     let binaryPublicKey = getBinaryFromString(publicKey);
     let binaryPrivateKey = getBinaryFromString(scalePrivateKey(publicKey.length, privateKey));
@@ -109,7 +112,7 @@ exports.encrypt = function (privateKey, data) {
  * @param {string} data
  * @returns {string}
  */
-exports.decrypt = function (privateKey, data) {
+function decrypt (privateKey, data) {
     let publicKey = data.slice(0, data.length / 2);
     let encryptedData = data.slice(data.length / 2, data.length);
     let binaryPublicKey = getBinaryFromString(publicKey);
