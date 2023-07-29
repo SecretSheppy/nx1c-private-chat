@@ -1,0 +1,21 @@
+{
+    "name": "private-chat",
+    "version": "1.0.0",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "ip": "^1.1.8",
+        "socket.io": "^4.7.1"
+    },
+    "main": "interface.html",
+    "window": {
+        "icon": "resources/images/logo.png",
+        "frame": false,
+        "toolbar": false,
+        "width": 500,
+        "height": 830,
+        "resizable": false,
+        "position": "center",
+        "transparent": true
+    }
+}
