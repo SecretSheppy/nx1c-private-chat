@@ -1,3 +1,4 @@
 {
-    "lang": "en"
+    "lang": "en",
+    "messagesToLoadFromBacklog": "10"
 }
