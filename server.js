@@ -5,6 +5,7 @@ const cors = require('cors');
 const logger = require('./resources/modules/logger');
 const fileTools = require('./resources/modules/fileTools');
 const room = require('./resources/modules/room');
+const colorTools = require('./resources/modules/colorTools');
 const ip = require('ip');
 
 const app = express();
@@ -33,10 +34,13 @@ io.on("connection", (socket) => {
     // user attempts to advance through the queue by submitting the correct password
     socket.on("advance-through-queue", (userSubmittedData) => {
         if (configJSON.password === userSubmittedData.password) {
-            socket.emit("advance-client-ui", {});
+            let returnData = {};
+            if (userSubmittedData.color === "") {
+                returnData = { color: colorTools.generateRandomHexColor() };
+            }
+            socket.emit("advance-client-ui", returnData);
             serverRoom.advanceUserToActive(socket.id);
-            // TODO - the below functionality seems to have stopped working out
-            serverRoom.broadcastToActiveUsers("user-advanced-to-active", { username: userSubmittedData.username });
+            serverRoom.broadcastToActiveUsersExcludeThisSocket("user-advanced-to-active", { username: userSubmittedData.username }, socket.id);
         } else if (serverRoom.incrementUserPasswordAttempts(socket.id) === "kicked") {
             socket.emit("user-kicked-from-queue", { reason: "Failed to present correct password" });
         }
@@ -45,7 +49,16 @@ io.on("connection", (socket) => {
     // broadcast message sent message to all users in the active queue
     socket.on("new message", (messageData) => {
         log.generic("User sent a message");
-        io.emit("message", messageData);
+        serverRoom.broadcastToActiveUsers("message", messageData);
+    });
+
+    // loading messages from backlog
+    socket.on("load-messages-from-backlog", (requestData) => {
+        log.generic(`User requested ${requestData.quantity} messages`);
+        let messageTreeLength = serverRoom.messageTree.messageTree.length;
+        for (let i = 0; i < requestData.quantity; i++) {
+            socket.emit("backlogged-message", serverRoom.messageTree.messageTree[messageTreeLength - i]);
+        }
     });
 
     // broadcast user disconnected to all users
