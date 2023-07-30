@@ -7,35 +7,49 @@
     <script type="text/javascript" src="resources/js/client.js"></script>
     <script type="text/javascript" src="resources/js/encrypter.js"></script>
     <script type="text/javascript" src="resources/js/interface.js"></script>
+    <script type="text/javascript" src="resources/jquery/jquery-3.7.0.min.js"></script>
     <script type="text/javascript">
-        const client = new ClientEnvironment("./config.json");
+        const fileTools = require('./resources/modules/fileTools');
+        const client = new ClientEnvironment();
     </script>
     <title>NX1C Private Chat</title>
 </head>
 <body>
-<div class="title-bar">
-    <div class="draggable-area">
-        <img src="resources/images/logo.png">
-        <p>NX1C Private Chat</p>
+<div class="title-bar-wrapper">
+    <div class="title-bar">
+        <div class="draggable-area">
+            <img src="resources/images/logo.png">
+            <p>NX1C Private Chat</p>
+        </div>
+        <button class="button" onclick="$('#key-modifier').fadeToggle(200);" style="display: none;" id="key-button">
+            <img src="resources/interface/key.png">
+        </button>
+        <button class="button" onclick="nw.Window.get().minimize()">
+            <img src="resources/interface/line.png">
+        </button>
+        <button class="button quit" onclick="nw.Window.get().close()">
+            <img src="resources/interface/cross.png">
+        </button>
     </div>
-    <button class="button" onclick="nw.Window.get().minimize()">
-        <img src="resources/interface/line.png">
-    </button>
-    <button class="button quit" onclick="nw.Window.get().close()">
-        <img src="resources/interface/cross.png">
-    </button>
 </div>
 <div id="alert" class="alert" style="display: none;">
     <p id="alert-text">Waiting for connection...</p>
 </div>
+<div class="thin" id="key-modifier" style="display: none">
+    <div class="inline-content-wrapper">
+        <h4>Private Key:</h4>
+        <input id="private-key-field" type="text" placeholder="Enter private key" autocomplete="off" required />
+        <input type="submit" value="Update" onclick="client.updatePrivateKey();">
+    </div>
+</div>
 <!--Login Screen-->
-<div class="recent-connections" id="recent-connections">
-    <h4>Previous Connections</h4>
-    <div class="connections">
-        <div class="connection" onclick="loadPreviousConnection(this)">
-            <p>Address: 127.0.0.1:3000</p>
-            <p>Username: SecretSheppy</p>
-        </div>
+<div id="recent-connections">
+    <div class="recent-connections">
+        <h4>Previous Connections</h4>
+        <div class="connections" id="connections"></div>
+        <script>
+            client.loadRecentConnections();
+        </script>
     </div>
 </div>
 <div class="login-wrapper" id="login">
@@ -62,7 +76,7 @@
         </div>
     </div>
 </div>
-<div class="login-wrapper" id="password">
+<div class="login-wrapper" id="password" style="display: none;">
     <div class="login">
         <img src="resources/images/pc_logo.png">
         <div class="label-wrapper">
@@ -72,6 +86,17 @@
         <div class="button-wrapper">
             <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
             <input type="submit" value="Connect" onclick="client.submitServerPassword();" />
+        </div>
+    </div>
+</div>
+<div class="login-wrapper" id="kicked" style="display: none;">
+    <div class="login">
+        <img src="resources/images/pc_logo.png">
+        <p>You have been kicked from the server queue</p>
+        <p id="kick-reason"></p>
+        <div class="button-wrapper">
+            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
+            <input type="submit" value="Home" onclick="client.showHome();" />
         </div>
     </div>
 </div>

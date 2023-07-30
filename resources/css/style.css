@@ -157,6 +157,7 @@ login styling
     justify-content: center;
 }
 
+.thin > .inline-content-wrapper,
 .login-wrapper > .login > .server-host-wrapper {
     width: 100%;
     box-sizing: border-box;
@@ -167,14 +168,23 @@ login styling
     margin-bottom: 10px;
 }
 
+.thin > .inline-content-wrapper {
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.thin > .inline-content-wrapper:focus-within,
 .login-wrapper > .login > .server-host-wrapper:focus-within {
     outline: solid 3px #fff;
 }
 
+.thin > .inline-content-wrapper > input,
 .login-wrapper > .login > .server-host-wrapper > input {
     padding: 6px;
 }
 
+.thin > .inline-content-wrapper > input:focus,
 .login-wrapper > .login > .server-host-wrapper > input:focus {
     outline: none;
 }
@@ -191,6 +201,17 @@ login styling
     direction: ltr;
 }
 
+.thin > .inline-content-wrapper > h4 {
+    width: fit-content;
+    flex-shrink: 0;
+    color: #fff;
+    padding: 3px;
+}
+
+.thin > .inline-content-wrapper > input[type="submit"] {
+    border-radius: 8px;
+}
+
 .alert {
     position: absolute;
     margin-top: 20px;
@@ -201,6 +222,15 @@ login styling
     background: linear-gradient(45deg, #FF3538, #EC91FF);
     color: #fff;
     border-radius: 10px;
+}
+
+.thin {
+    position: absolute;
+    margin-top: 17px;
+    margin-left: 17px;
+    width: calc(100% - 34px);
+    padding: 3px;
+    box-sizing: border-box;
 }
 
 @keyframes fadeout {
@@ -242,8 +272,9 @@ Additional Style for the chat
 
 .chat-wrapper {
     padding: 20px;
-    height: 665px;
+    height: calc(100vh - 125px);
     overflow: auto;
+    box-sizing: border-box;
 }
 
 .chat-wrapper > .message {
@@ -256,8 +287,8 @@ Additional Style for the chat
 }
 
 .chat-wrapper > .message > .user-icon {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background-color: #1c9640;
     border-radius: 10px;
     color: #fff;
@@ -340,6 +371,10 @@ scrollbar
 title-bar
  */
 
+.title-bar-wrapper {
+    background-color: #101010;
+}
+
 .title-bar {
     display: flex;
 }
@@ -367,13 +402,14 @@ title-bar
 
 .title-bar > .button {
     height: 30px;
-    width: 50px;
+    width: 46px;
     background-color: #101010;
     border: none;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .title-bar > .button > img {
@@ -415,7 +451,7 @@ recent connections
 }
 
 .recent-connections > .connections {
-    height: 170px;
+    height: calc(100% - 38px);
     padding: 3px;
     overflow: auto;
 }
