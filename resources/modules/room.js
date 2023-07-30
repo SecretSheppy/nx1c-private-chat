@@ -1,12 +1,17 @@
+const fileTools = require('./fileTools');
+const mTree = require('./mTree');
+
 exports.Room = class {
 
     queue = [];
     active = [];
+    messageTreePath = "./logs/message.tree";
 
     constructor (logger, config, io) {
         this.logger = logger;
         this.config = config;
         this.io = io;
+        this.messageTree = fileTools.loadMessageTree(this.messageTreePath);
     }
 
     addUserToQueue (socketId) {
@@ -53,8 +58,25 @@ exports.Room = class {
     }
 
     broadcastToActiveUsers (subjectToBroadcast, dataToBroadcast) {
+        this.addToMessageTree({ subjectToBroadcast, dataToBroadcast });
+        // TODO - rewrite with map for optimisation with large userbase
         for (let i = 0; i < this.active.length; i++) {
             this.io.to(this.active[i]).emit(subjectToBroadcast, dataToBroadcast);
         }
+    }
+
+    broadcastToActiveUsersExcludeThisSocket (subjectToBroadcast, dataToBroadcast, socketToExclude) {
+        this.addToMessageTree({ subjectToBroadcast, dataToBroadcast });
+        // TODO - rewrite with map for optimisation with large userbase
+        for (let i = 0; i < this.active.length; i++) {
+            if (this.active[i] !== socketToExclude) {
+                this.io.to(this.active[i]).emit(subjectToBroadcast, dataToBroadcast);
+            }
+        }
+    }
+
+    addToMessageTree (data) {
+        this.messageTree.pushMessage(data);
+        fileTools.appendToRawMessageTree(this.messageTreePath, data);
     }
 }
