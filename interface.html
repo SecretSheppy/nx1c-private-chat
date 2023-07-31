@@ -19,7 +19,7 @@
     <div class="title-bar">
         <div class="draggable-area">
             <img src="resources/images/logo.png">
-            <p>NX1C Private Chat</p>
+            <p name="title-text-localisation">NX1C Private Chat</p>
         </div>
         <button class="button" onclick="$('#key-modifier').fadeToggle(200);" style="display: none;" id="key-button">
             <img src="resources/interface/key.png">
@@ -33,19 +33,19 @@
     </div>
 </div>
 <div id="alert" class="alert" style="display: none;">
-    <p id="alert-text">Waiting for connection...</p>
+    <p id="alert-text" name="alert-text-localisation">Waiting for connection...</p>
 </div>
 <div class="thin" id="key-modifier" style="display: none">
     <div class="inline-content-wrapper">
-        <h4>Private Key:</h4>
-        <input id="private-key-field" type="text" placeholder="Enter private key" autocomplete="off" required />
-        <input type="submit" value="Update" onclick="client.updatePrivateKey();">
+        <h4 name="private-key-prompt-localisation">Private Key:</h4>
+        <input name="private-key-field-localisation" id="private-key-field" type="text" placeholder="Enter private key" autocomplete="off" required />
+        <input name="private-key-submit-localisation" type="submit" value="Update" onclick="client.updatePrivateKey();">
     </div>
 </div>
 <!--Login Screen-->
 <div id="recent-connections">
     <div class="recent-connections">
-        <h4>Previous Connections</h4>
+        <h4 name="previous-connections-prompt-localisation">Previous Connections</h4>
         <div class="connections" id="connections"></div>
         <script>
             client.loadRecentConnections();
@@ -56,23 +56,23 @@
     <div class="login">
         <img src="resources/images/pc_logo.png">
         <div class="label-wrapper">
-            <label for="username">Server Host</label>
+            <label for="username" name="server-host-prompt-localisation">Server Host</label>
         </div>
         <div class="server-host-wrapper">
             <select id="protocol">
                 <option value="http://">http://</option>
                 <option value="https://">https://</option>
             </select>
-            <input id="server-host" type="text" placeholder="www.example.com" name="server-host" autocomplete="off" required />
+            <input id="server-host" type="text" placeholder="www.example.com" autocomplete="off" required />
         </div>
         <div class="label-wrapper">
-            <label for="username">Username</label>
+            <label for="username" name="username-prompt-localisation">Username</label>
         </div>
-        <input id="username" type="text" placeholder="Enter your username" name="username" autocomplete="off" required />
-        <p style="margin-top: 20px">In order to read and send messages in the server you will need to add the servers private encryption key into the privatekeys.json file</p>
+        <input id="username" type="text" placeholder="Enter your username" name="username-prompt-field-localisation" autocomplete="off" required />
+        <p name="private-key-information-prompt" style="margin-top: 20px">In order to read and send messages in the server you will need to add the servers private encryption key into the privatekeys.json file</p>
         <div class="button-wrapper">
-            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
-            <input type="submit" value="Connect" onclick="client.connectToServer();" />
+            <input name="quit-button-localisation" type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
+            <input name="connect-button-localisation" type="submit" value="Connect" onclick="client.connectToServer();" />
         </div>
     </div>
 </div>
@@ -80,23 +80,23 @@
     <div class="login">
         <img src="resources/images/pc_logo.png">
         <div class="label-wrapper">
-            <label for="password-text">Server Password</label>
+            <label for="password-text" name="server-password-prompt-localisation">Server Password</label>
         </div>
-        <input id="password-text" type="password" placeholder="Enter server password" name="password" autocomplete="off" required />
+        <input id="password-text" type="password" placeholder="Enter server password" name="server-password-prompt-field-localisation" autocomplete="off" required />
         <div class="button-wrapper">
-            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
-            <input type="submit" value="Connect" onclick="client.submitServerPassword();" />
+            <input name="quit-button-localisation" type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
+            <input name="connect-button-localisation" type="submit" value="Connect" onclick="client.submitServerPassword();" />
         </div>
     </div>
 </div>
 <div class="login-wrapper" id="kicked" style="display: none;">
     <div class="login">
         <img src="resources/images/pc_logo.png">
-        <p>You have been kicked from the server queue</p>
+        <p name="kicked-notification-localisation">You have been kicked from the server queue</p>
         <p id="kick-reason"></p>
         <div class="button-wrapper">
-            <input type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
-            <input type="submit" value="Home" onclick="client.showHome();" />
+            <input name="quit-button-localisation" type="reset" value="Quit" class="spacing" onclick="nw.Window.get().close();" />
+            <input name="home-button-localisation" type="submit" value="Home" onclick="client.showHome();" />
         </div>
     </div>
 </div>
@@ -105,11 +105,11 @@
     <div class="chat-wrapper" id="message-list">
     </div>
     <div class="chat-content-info">
-        <p id="message-characters">Message Characters: 0/500</p>
+        <p id="message-characters" name="message-character-localisation">Message Characters: 0/500</p>
     </div>
     <div class="chat-box">
-        <input id="message-box" type="text" placeholder="Enter message">
-        <input type="submit" value="Send" onclick="client.sendMessage()">
+        <input name="message-field-localisation" id="message-box" type="text" placeholder="Enter message">
+        <input name="send-button-localisation" type="submit" value="Send" onclick="client.sendMessage()">
     </div>
 </div>
 </body>
