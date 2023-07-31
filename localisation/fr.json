@@ -1,0 +1,90 @@
+{
+    "launchData": {
+        "title-text-localisation": {
+            "type": "innerText",
+            "text": "NX1C Chat privé"
+        },
+        "private-key-prompt-localisation": {
+            "type": "innerText",
+            "text": "Clé privée:"
+        },
+        "private-key-field-localisation": {
+            "type": "placeholder",
+            "text": "Saisir la clé privée"
+        },
+        "private-key-submit-localisation": {
+            "type": "value",
+            "text": "Mise à jour"
+        },
+        "previous-connections-prompt-localisation": {
+            "type": "innerText",
+            "text": "Connexions précédentes"
+        },
+        "server-host-prompt-localisation": {
+            "type": "innerText",
+            "text": "Hôte du serveur"
+        },
+        "username-prompt-localisation": {
+            "type": "innerText",
+            "text": "Nom d'utilisateur"
+        },
+        "username-prompt-field-localisation": {
+            "type": "placeholder",
+            "text": "Entrez votre nom d'utilisateur"
+        },
+        "private-key-information-prompt": {
+            "type": "innerText",
+            "text": "Pour pouvoir lire et envoyer des messages sur le serveur, vous devez ajouter la clé de cryptage privée du serveur dans le fichier previous-connections.json."
+        },
+        "quit-button-localisation": {
+            "type": "value",
+            "text": "Démissionner"
+        },
+        "connect-button-localisation": {
+            "type": "value",
+            "text": "Connecter"
+        },
+        "server-password-prompt-localisation": {
+            "type": "innerText",
+            "text": "Mot de passe du serveur"
+        },
+        "server-password-prompt-field-localisation": {
+            "type": "placeholder",
+            "text": "Saisir le mot de passe du serveur"
+        },
+        "kicked-notification-localisation": {
+            "type": "innerText",
+            "text": "Vous avez été expulsé de la file d'attente du serveur"
+        },
+        "home-button-localisation": {
+            "type": "value",
+            "text": "Accueil"
+        },
+        "message-character-localisation": {
+            "type": "innerText",
+            "text": "Caractères du message: 0/500"
+        },
+        "message-field-localisation": {
+            "type": "placeholder",
+            "text": "Saisir le message"
+        },
+        "send-button-localisation": {
+            "type": "value",
+            "text": "Envoyer"
+        }
+    },
+    "runtimeData": {
+        "alerts": {
+            "waitingForConn": "En attente de connexion...",
+            "connPossibleFailure": "NX1C Private Chat a des difficultés à se connecter à"
+        },
+        "kickReasons": {
+            "passwordAttempts": "Échec de la présentation du mot de passe correct"
+        },
+        "userAlerts": {
+            "joined": "a rejoint le serveur",
+            "quit": "a quitté le serveur"
+        },
+        "messageCharacters": "Caractères du message: "
+    }
+}
