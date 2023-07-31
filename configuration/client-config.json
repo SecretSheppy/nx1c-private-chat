@@ -1,4 +1,5 @@
 {
-    "lang": "en",
-    "messagesToLoadFromBacklog": "10"
+    "language": "en",
+    "messagesToLoadFromBacklog": "10",
+    "publicKeyLength": "16"
 }
