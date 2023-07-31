@@ -1,55 +1,62 @@
 # NX1C Private Chat
 
+# Installation
+
+## Prerequisites
+
+* node.js (v16.18.0+)
+  * [Get the latest version here](https://nodejs.org/en/download)
+* nw.js (v0.72.0+)
+  * [Get the latest version here](https://nwjs.io/downloads/)
+* jquery (v3.6.0+)
+  * [Get the latest version here](https://jquery.com/download/)
+
+# Usage
+
+## Using the client
+
+## Client side settings
+
+```json
+{
+    "language": "en",
+    "messagesToLoadFromBacklog": "10",
+    "publicKeyLength": "16"
+}
+```
+
+```json
+{
+    "127.0.0.1:3000": {
+        "protocol": "http://",
+        "username": "test user",
+        "color": "#2266FF",
+        "privateKey": "lJDnds921SjdsOJdanLDAn"
+    }
+}
+```
+
+## Client side localisation
+
+## Using the server
+
+## Server side settings
+
+```json
+{
+    "name": "NX1C Private Chat Server",
+    "version": "1.0.0",
+    "port": "3000",
+    "password": "1234",
+    "passwordAttempts": "10"
+}
+```
+
+# Technical documentation
+
 ## Encryption
-The default NX1C Private Chat encryption module `resources/modules/encrypter.js`
+The default NX1C Private Chat encryption module `resources/modules/encrypter/`
 provides a ...
-
-```javascript
-/**
- * generates a random key
- * @param {number} lengthOfKeyInCharacters
- * @returns {string}
- */
-function generateRandomPublicKey (lengthOfKeyInCharacters) {
-    // key generation algorithm
-    return key;
-}
-```
-
-```javascript
-/**
- * generates a random private key (only used for initial server configuration)
- * @param {number} lengthOfPrivateKey
- * @returns {string}
- */
-exports.generateRandomPrivateKey = function (lengthOfPrivateKey) {
-    return generateRandomPublicKey(lengthOfPrivateKey);
-}
-```
-
-```javascript
-/**
- * encrypts data
- * @param {string} privateKey
- * @param {string} dataToEncrypt
- * @returns {string}
- */
-exports.encrypt = function (privateKey, dataToEncrypt) {
-    // encryption algorithm here
-    return encryptedData;
-}
-
-/**
- * decrypts data
- * @param {string} privateKey
- * @param {string} dataToDecrypt
- * @returns {string}
- */
-exports.decrypt = function (privateKey, dataToDecrypt) {
-    // decryption algorithm here
-    return decryptedData;
-}
-```
 
 ## Message Tree
 
@@ -59,3 +66,4 @@ exports.decrypt = function (privateKey, dataToDecrypt) {
 {"subjectToBroadcast":"user-left-server","dataToBroadcast":{"username":"lb4p6vYgBo8NqJR|<x!\u0010t{\u0000\tY\tQK"}}
 ```
 
+## Localisation
