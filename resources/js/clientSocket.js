@@ -49,5 +49,12 @@ client.socket.on("backlogged-message", (messageData) => {
         case "user-advanced-to-active":
             client.createUserActiveElement(messageData.dataToBroadcast, "pre");
             break;
+        case "user-left-server":
+            client.createUserActiveElement(messageData.dataToBroadcast, "pre", "quit");
+            break;
     }
+});
+
+client.socket.on("user-left-server", (userData) => {
+    client.createUserActiveElement(userData, "post", "quit");
 });

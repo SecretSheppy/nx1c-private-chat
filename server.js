@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
                 returnData = { color: colorTools.generateRandomHexColor() };
             }
             socket.emit("advance-client-ui", returnData);
-            serverRoom.advanceUserToActive(socket.id);
+            serverRoom.advanceUserToActive(socket.id, userSubmittedData.username);
             serverRoom.broadcastToActiveUsersExcludeThisSocket("user-advanced-to-active", { username: userSubmittedData.username }, socket.id);
         } else if (serverRoom.incrementUserPasswordAttempts(socket.id) === "kicked") {
             socket.emit("user-kicked-from-queue", { reason: "Failed to present correct password" });
@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
 
     // broadcast user disconnected to all users
     socket.on("disconnect", () => {
+        serverRoom.handleUserQuit(socket.id);
         log.generic("User left the server");
     });
 

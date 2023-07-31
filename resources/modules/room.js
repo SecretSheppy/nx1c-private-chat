@@ -14,19 +14,23 @@ exports.Room = class {
         this.messageTree = fileTools.loadMessageTree(this.messageTreePath);
     }
 
+    logServerUsers () {
+        this.logger.generic("Users in server queue: " + this.queue.length);
+        this.logger.generic("Users in server: " + this.active.length);
+    }
+
     addUserToQueue (socketId) {
         this.queue.push({
             socket: socketId,
             failedLoginAttemptCounter: 0
         });
         this.logger.generic("User joined the server queue");
-        this.logger.generic("Users in server queue: " + this.queue.length);
-        this.logger.generic("Users in server: " + this.active.length);
+        this.logServerUsers();
     }
 
-    getIndexOfUserInQueue (socketId) {
-        for (let i = 0; i < this.queue.length; i++) {
-            if (this.queue[i].socket === socketId) {
+    getIndexOfUserBySocket (socketId, array) {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i].socket === socketId) {
                 return i;
             }
         }
@@ -34,8 +38,8 @@ exports.Room = class {
     }
 
     incrementUserPasswordAttempts (socketId) {
-        this.queue[this.getIndexOfUserInQueue(socketId)].failedLoginAttemptCounter += 1;
-        if (this.queue[this.getIndexOfUserInQueue(socketId)].failedLoginAttemptCounter == this.config.passwordAttempts) {
+        this.queue[this.getIndexOfUserBySocket(socketId, this.queue)].failedLoginAttemptCounter += 1;
+        if (this.queue[this.getIndexOfUserBySocket(socketId, this.queue)].failedLoginAttemptCounter == this.config.passwordAttempts) {
             this.kickUserFromQueue(socketId);
             this.logger.warning("User kicked from queue (Failed to present correct password)");
             return "kicked";
@@ -46,22 +50,30 @@ exports.Room = class {
     }
 
     kickUserFromQueue (socketId) {
-        this.queue.splice(this.getIndexOfUserInQueue(socketId), 1);
+        this.queue.splice(this.getIndexOfUserBySocket(socketId, this.queue), 1);
     }
 
-    advanceUserToActive (socketId) {
+    kickUserFromActive (socketId) {
+        let index = this.getIndexOfUserBySocket(socketId, this.active);
+        this.broadcastToActiveUsers("user-left-server", { username: this.active[index].username });
+        this.active.splice(index, 1);
+    }
+
+    advanceUserToActive (socketId, username) {
         this.kickUserFromQueue(socketId);
-        this.active.push(socketId);
+        this.active.push({
+            socket: socketId,
+            username: username
+        });
         this.logger.generic("User advanced to active");
-        this.logger.generic("Users in server queue: " + this.queue.length);
-        this.logger.generic("Users in server: " + this.active.length);
+        this.logServerUsers();
     }
 
     broadcastToActiveUsers (subjectToBroadcast, dataToBroadcast) {
         this.addToMessageTree({ subjectToBroadcast, dataToBroadcast });
         // TODO - rewrite with map for optimisation with large userbase
         for (let i = 0; i < this.active.length; i++) {
-            this.io.to(this.active[i]).emit(subjectToBroadcast, dataToBroadcast);
+            this.io.to(this.active[i].socket).emit(subjectToBroadcast, dataToBroadcast);
         }
     }
 
@@ -69,8 +81,8 @@ exports.Room = class {
         this.addToMessageTree({ subjectToBroadcast, dataToBroadcast });
         // TODO - rewrite with map for optimisation with large userbase
         for (let i = 0; i < this.active.length; i++) {
-            if (this.active[i] !== socketToExclude) {
-                this.io.to(this.active[i]).emit(subjectToBroadcast, dataToBroadcast);
+            if (this.active[i].socket !== socketToExclude) {
+                this.io.to(this.active[i].socket).emit(subjectToBroadcast, dataToBroadcast);
             }
         }
     }
@@ -78,5 +90,15 @@ exports.Room = class {
     addToMessageTree (data) {
         this.messageTree.pushMessage(data);
         fileTools.appendToRawMessageTree(this.messageTreePath, data);
+    }
+
+    handleUserQuit (socketId) {
+        let userInQueue = this.getIndexOfUserBySocket(socketId, this.queue);
+        if (userInQueue !== null) {
+            this.kickUserFromQueue(socketId);
+        } else {
+            this.kickUserFromActive(socketId);
+        }
+        this.logServerUsers();
     }
 }

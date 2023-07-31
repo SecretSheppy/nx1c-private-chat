@@ -12,16 +12,22 @@ class ClientEnvironment {
         this.previousConnections = fileTools.loadJson(this.previousConnectionsPath);
     }
 
+    async slowOrNoConnection () {
+        setTimeout(() => {
+            document.getElementById("alert-text").innerText = `NX1C Private Chat is having trouble connecting to ${this.serverProtocol + this.serverHost}`;
+        }, 10000)
+    }
+
     connectToServer () {
         this.serverProtocol = document.getElementById("protocol").value;
         this.serverHost = document.getElementById("server-host").value;
         this.username = document.getElementById("username").value;
         if (this.serverHost !== null && this.username !== null) {
             this.socket = io.connect(this.serverProtocol + this.serverHost);
+            document.getElementById("alert-text").innerText = "Waiting for connection...";
             $("#alert").fadeIn(500);
             this.appendSocketScript();
-            // TODO - build a better loading connection indicator
-            // document.getElementById("alert").style.display = "block";
+            this.slowOrNoConnection();
         }
     }
 
@@ -122,15 +128,20 @@ class ClientEnvironment {
             document.getElementById("message-list").prepend(newMessageElement);
         }
         this.scrollToBottom();
+        document.getElementById("message-characters").innerText = "Message Characters: 0/500";
     }
 
-    createUserActiveElement (userData, position = "post") {
+    createUserActiveElement (userData, position = "post", type = "joined") {
         let decryptedUsername = decrypt(client.privateKey, userData.username);
         let userJoinedWrapper = document.createElement("div");
         userJoinedWrapper.classList.add("user-joined-wrapper");
         let usernameWrapper = document.createElement("div");
         usernameWrapper.classList.add("username-wrapper");
-        usernameWrapper.innerText = decryptedUsername + " joined the server";
+        if (type !== "quit") {
+            usernameWrapper.innerText = decryptedUsername + " joined the server";
+        } else {
+            usernameWrapper.innerText = decryptedUsername + " left the server";
+        }
         userJoinedWrapper.appendChild(usernameWrapper);
         if (position !== "pre") {
             document.getElementById("message-list").appendChild(userJoinedWrapper);
