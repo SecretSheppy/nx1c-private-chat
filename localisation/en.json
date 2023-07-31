@@ -1,8 +1,90 @@
 {
-    "title": "NX1C Private Chat",
-    "prevConns": "Previous Connections",
-    "address": "Address",
-    "username": "Username",
-    "private chat": "Private Chat",
-    "server host": "Server Host"
+    "launchData": {
+        "title-text-localisation": {
+            "type": "innerText",
+            "text": "NX1C Private Chat"
+        },
+        "private-key-prompt-localisation": {
+            "type": "innerText",
+            "text": "Private Key:"
+        },
+        "private-key-field-localisation": {
+            "type": "placeholder",
+            "text": "Enter private key"
+        },
+        "private-key-submit-localisation": {
+            "type": "value",
+            "text": "Update"
+        },
+        "previous-connections-prompt-localisation": {
+            "type": "innerText",
+            "text": "Previous Connections"
+        },
+        "server-host-prompt-localisation": {
+            "type": "innerText",
+            "text": "Server Host"
+        },
+        "username-prompt-localisation": {
+            "type": "innerText",
+            "text": "Username"
+        },
+        "username-prompt-field-localisation": {
+            "type": "placeholder",
+            "text": "Enter your username"
+        },
+        "private-key-information-prompt": {
+            "type": "innerText",
+            "text": "In order to read and send messages in the server you will need to add the servers private encryption key into the previous-connections.json file"
+        },
+        "quit-button-localisation": {
+            "type": "value",
+            "text": "Quit"
+        },
+        "connect-button-localisation": {
+            "type": "value",
+            "text": "Connect"
+        },
+        "server-password-prompt-localisation": {
+            "type": "innerText",
+            "text": "Server Password"
+        },
+        "server-password-prompt-field-localisation": {
+            "type": "placeholder",
+            "text": "Enter server password"
+        },
+        "kicked-notification-localisation": {
+            "type": "innerText",
+            "text": "You have been kicked from the server queue"
+        },
+        "home-button-localisation": {
+            "type": "value",
+            "text": "Home"
+        },
+        "message-character-localisation": {
+            "type": "innerText",
+            "text": "Message Characters: 0/500"
+        },
+        "message-field-localisation": {
+            "type": "placeholder",
+            "text": "Enter message"
+        },
+        "send-button-localisation": {
+            "type": "value",
+            "text": "Send"
+        }
+    },
+    "runtimeData": {
+        "alerts": {
+            "waitingForConn": "Waiting for connection...",
+            "connPossibleFailure": "NX1C Private Chat is having trouble connecting to "
+        },
+        "kickReasons": {
+            "passwordAttempts": "Failed to present correct password"
+        },
+        "userAlerts": {
+            "joined": "joined the server",
+            "quit": "left the server"
+        },
+        "messageCharacters": "Message Characters: "
+    }
 }
