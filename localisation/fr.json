@@ -76,7 +76,7 @@
     "runtimeData": {
         "alerts": {
             "waitingForConn": "En attente de connexion...",
-            "connPossibleFailure": "NX1C Private Chat a des difficultés à se connecter à"
+            "connPossibleFailure": "NX1C Private Chat a des difficultés à se connecter à "
         },
         "kickReasons": {
             "passwordAttempts": "Échec de la présentation du mot de passe correct"
