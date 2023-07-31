@@ -7,14 +7,14 @@ class ClientEnvironment {
     previousConnectionsPath = './configuration/previous-connections.json';
 
     constructor () {
-        this.privateKey = generateRandomPrivateKey(16);
         this.clientConfig = fileTools.loadJson(this.clientConfigPath);
+        this.privateKey = encKey.random(this.clientConfig.publicKeyLength);
         this.previousConnections = fileTools.loadJson(this.previousConnectionsPath);
     }
 
     async slowOrNoConnection () {
         setTimeout(() => {
-            document.getElementById("alert-text").innerText = `NX1C Private Chat is having trouble connecting to ${this.serverProtocol + this.serverHost}`;
+            document.getElementById("alert-text").innerText = this.localisationJSON.runtimeData.alerts.connPossibleFailure + this.serverProtocol + this.serverHost;
         }, 10000)
     }
 
@@ -24,7 +24,7 @@ class ClientEnvironment {
         this.username = document.getElementById("username").value;
         if (this.serverHost !== null && this.username !== null) {
             this.socket = io.connect(this.serverProtocol + this.serverHost);
-            document.getElementById("alert-text").innerText = "Waiting for connection...";
+            document.getElementById("alert-text").innerText = this.localisationJSON.runtimeData.alerts.waitingForConn;
             $("#alert").fadeIn(500);
             this.appendSocketScript();
             this.slowOrNoConnection();
@@ -41,7 +41,7 @@ class ClientEnvironment {
     submitServerPassword () {
         this.socket.emit("advance-through-queue", {
             password: document.getElementById("password-text").value,
-            username: encrypt(this.privateKey, this.username),
+            username: encrypter.encrypt(this.privateKey, this.username),
             color: this.clientColor
         })
     }
@@ -50,9 +50,9 @@ class ClientEnvironment {
         let messageComposerElement = document.getElementById("message-box")
         if (messageComposerElement.value !== "") {
             this.socket.emit("new message", {
-                username: encrypt(this.privateKey, this.username),
-                message: encrypt(this.privateKey, messageComposerElement.value),
-                color: encrypt(this.privateKey, this.clientColor)
+                username: encrypter.encrypt(this.privateKey, this.username),
+                message: encrypter.encrypt(this.privateKey, messageComposerElement.value),
+                color: encrypter.encrypt(this.privateKey, this.clientColor)
             });
             messageComposerElement.value = "";
         };
@@ -74,6 +74,7 @@ class ClientEnvironment {
     }
 
     loadRecentConnections () {
+        // TODO - localise this section
         for (let address in this.previousConnections) {
             let connectionElement = document.createElement("div");
             connectionElement.classList.add("connection");
@@ -102,9 +103,9 @@ class ClientEnvironment {
     }
 
     createMessageElement (messageData, position = "post") {
-        let decryptedUsername = decrypt(client.privateKey, messageData.username);
-        let decryptedMessage = decrypt(client.privateKey, messageData.message);
-        let decryptedColor = decrypt(client.privateKey, messageData.color);
+        let decryptedUsername = encrypter.decrypt(client.privateKey, messageData.username);
+        let decryptedMessage = encrypter.decrypt(client.privateKey, messageData.message);
+        let decryptedColor = encrypter.decrypt(client.privateKey, messageData.color);
         let newMessageElement = document.createElement("div");
         newMessageElement.classList.add("message");
         let userIconElement = document.createElement("div");
@@ -128,19 +129,19 @@ class ClientEnvironment {
             document.getElementById("message-list").prepend(newMessageElement);
         }
         this.scrollToBottom();
-        document.getElementById("message-characters").innerText = "Message Characters: 0/500";
+        document.getElementById("message-characters").innerText = `${this.localisationJSON.runtimeData.messageCharacters}0/500`;
     }
 
     createUserActiveElement (userData, position = "post", type = "joined") {
-        let decryptedUsername = decrypt(client.privateKey, userData.username);
+        let decryptedUsername = encrypter.decrypt(client.privateKey, userData.username);
         let userJoinedWrapper = document.createElement("div");
         userJoinedWrapper.classList.add("user-joined-wrapper");
         let usernameWrapper = document.createElement("div");
         usernameWrapper.classList.add("username-wrapper");
         if (type !== "quit") {
-            usernameWrapper.innerText = decryptedUsername + " joined the server";
+            usernameWrapper.innerText = `${decryptedUsername} ${this.localisationJSON.runtimeData.userAlerts.joined}`;
         } else {
-            usernameWrapper.innerText = decryptedUsername + " left the server";
+            usernameWrapper.innerText = `${decryptedUsername} ${this.localisationJSON.runtimeData.userAlerts.quit}`;
         }
         userJoinedWrapper.appendChild(usernameWrapper);
         if (position !== "pre") {
@@ -153,6 +154,23 @@ class ClientEnvironment {
 
     scrollToBottom () {
         document.getElementById("message-list").scrollTop = document.getElementById("message-list").scrollHeight;
+    }
+
+    localise () {
+        this.localisationJSON = fileTools.loadJson(`./localisation/${this.clientConfig.language}.json`);
+        let localisationKeys = Object.keys(this.localisationJSON.launchData);
+        localisationKeys.forEach(key => {
+            let currentFocusElements = document.getElementsByName(key);
+            if (this.localisationJSON.launchData[key].type === "innerText") {
+                currentFocusElements.forEach(element => {
+                    element.innerText = this.localisationJSON.launchData[key].text;
+                });
+            } else {
+                currentFocusElements.forEach(element => {
+                    element.setAttribute(this.localisationJSON.launchData[key].type, this.localisationJSON.launchData[key].text);
+                });
+            }
+        });
     }
 
 }

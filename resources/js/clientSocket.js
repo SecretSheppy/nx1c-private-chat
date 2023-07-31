@@ -1,7 +1,7 @@
 client.socket.on("joined-server-queue", (passwordData) => {
     if (!passwordData.password) {
         client.socket.emit("advance-through-queue", {
-            username: encrypt(client.privateKey, client.username),
+            username: encrypter.encrypt(client.privateKey, client.username),
             password: null
         });
     } else {
