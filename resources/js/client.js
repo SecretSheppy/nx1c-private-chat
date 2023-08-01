@@ -14,36 +14,36 @@ class ClientEnvironment {
 
     async slowOrNoConnection () {
         setTimeout(() => {
-            document.getElementById("alert-text").innerText = this.localisationJSON.runtimeData.alerts.connPossibleFailure + this.serverProtocol + this.serverHost;
-        }, 10000)
+            $("#alert-text")
+                .text(this.localisationJSON.runtimeData.alerts.connPossibleFailure
+                    + this.serverProtocol
+                    + this.serverHost);
+        }, 10000);
     }
 
     connectToServer () {
-        this.serverProtocol = document.getElementById("protocol").value;
-        this.serverHost = document.getElementById("server-host").value;
-        this.username = document.getElementById("username").value;
+        this.serverProtocol = $("#protocol").val();
+        this.serverHost = $("#server-host").val();
+        this.username = $("#username").val();
         if (this.serverHost !== null && this.username !== null) {
             this.socket = io.connect(this.serverProtocol + this.serverHost);
-            document.getElementById("alert-text").innerText = this.localisationJSON.runtimeData.alerts.waitingForConn;
+            $("#alert-text").text(this.localisationJSON.runtimeData.alerts.waitingForConn);
             $("#alert").fadeIn(500);
-            this.appendSocketScript();
+            $("head").append(
+                $("<script>")
+                    .attr("type", "text/javascript")
+                    .attr("src", "resources/js/clientSocket.js")
+            );
             this.slowOrNoConnection();
         }
     }
 
-    appendSocketScript () {
-        let socketScript = document.createElement("script");
-        socketScript.setAttribute("type", "text/javascript");
-        socketScript.setAttribute("src", "resources/js/clientSocket.js");
-        document.head.appendChild(socketScript);
-    }
-
     submitServerPassword () {
         this.socket.emit("advance-through-queue", {
-            password: document.getElementById("password-text").value,
+            password: $("#password-text").val(),
             username: encrypter.encrypt(this.privateKey, this.username),
             color: this.clientColor
-        })
+        });
     }
 
     sendMessage () {
@@ -73,87 +73,94 @@ class ClientEnvironment {
         this.transitionBetweenPages(["#kicked"], ["#login", "#recent-connections"]);
     }
 
+    // TODO - localise this part
     loadRecentConnections () {
-        // TODO - localise this section
         for (let address in this.previousConnections) {
-            let connectionElement = document.createElement("div");
-            connectionElement.classList.add("connection");
-            connectionElement.setAttribute("onclick", "loadPreviousConnection(this);");
-            let addressElement = document.createElement("p");
-            addressElement.innerText = "Address: " + this.previousConnections[address].protocol + address;
-            connectionElement.appendChild(addressElement);
-            let usernameElement = document.createElement("p");
-            usernameElement.innerText = "Username: " + this.previousConnections[address]["username"];
-            connectionElement.appendChild(usernameElement);
-            let colorElement = document.createElement("p");
-            colorElement.innerText = "Color: " + this.previousConnections[address]["color"];
-            connectionElement.appendChild(colorElement);
-            document.getElementById("connections").appendChild(connectionElement);
+            let connectionData = {
+                protocol: this.previousConnections[address].protocol,
+                username: this.previousConnections[address].username,
+                color: this.previousConnections[address].color,
+                privateKey: this.previousConnections[address].privateKey
+            }
+            $("#connections").append(
+                $("<div>")
+                    .addClass("connection")
+                    .click(() => {
+                        $("#protocol").val(connectionData.protocol);
+                        $("#server-host").val(address);
+                        $("#username").val(connectionData.username);
+                        this.clientColor = connectionData.color;
+                        this.privateKey = connectionData.privateKey;
+                        this.connectToServer();
+                    })
+                    .append(
+                        $("<p>").text(`Address: ${connectionData.protocol + address}`),
+                        $("<p>").text(`Username: ${connectionData.username}`),
+                        $("<p>").text(`Color: ${connectionData.color}`)
+                    )
+            );
         }
     }
 
     updatePrivateKey () {
-        let privateKeyElement = document.getElementById("private-key-field");
-        this.previousConnections[this.serverHost].privateKey = this.privateKey = privateKeyElement.value;
+        this.previousConnections[this.serverHost].privateKey = this.privateKey = $("#private-key-field").val();
         fileTools.saveJson(this.previousConnectionsPath, this.previousConnections);
         $("#key-modifier").fadeOut(200);
         setTimeout(() => {
-            privateKeyElement.value = "";
+            $("#private-key-field").val("");
         }, 200);
     }
 
     createMessageElement (messageData, position = "post") {
-        let decryptedUsername = encrypter.decrypt(client.privateKey, messageData.username);
-        let decryptedMessage = encrypter.decrypt(client.privateKey, messageData.message);
-        let decryptedColor = encrypter.decrypt(client.privateKey, messageData.color);
-        let newMessageElement = document.createElement("div");
-        newMessageElement.classList.add("message");
-        let userIconElement = document.createElement("div");
-        userIconElement.classList.add("user-icon");
-        userIconElement.style.backgroundColor = decryptedColor;
-        userIconElement.innerText = decryptedUsername[0].toUpperCase();
-        newMessageElement.appendChild(userIconElement);
-        let messageWrapperElement = document.createElement("div");
-        messageWrapperElement.classList.add("message-wrapper");
-        messageWrapperElement.style.backgroundColor = decryptedColor;
-        let usernameElement = document.createElement("h4");
-        usernameElement.innerText = decryptedUsername;
-        messageWrapperElement.appendChild(usernameElement);
-        let messageTextElement = document.createElement("p");
-        messageTextElement.innerText = decryptedMessage;
-        messageWrapperElement.appendChild(messageTextElement);
-        newMessageElement.appendChild(messageWrapperElement);
-        if (position !== "pre") {
-            document.getElementById("message-list").appendChild(newMessageElement);
-        } else {
-            document.getElementById("message-list").prepend(newMessageElement);
+        let message = {
+            username: encrypter.decrypt(client.privateKey, messageData.username),
+            text: encrypter.decrypt(client.privateKey, messageData.message),
+            color: encrypter.decrypt(client.privateKey, messageData.color)
         }
+        let newMessageElement = $("<div>")
+            .addClass("message")
+            .append(
+                $("<div>")
+                    .addClass("user-icon")
+                    .css("background-color", message.color)
+                    .text(message.username[0].toUpperCase()),
+                $("<div>")
+                    .addClass("message-wrapper")
+                    .css("background-color", message.color)
+                    .append(
+                        $("<h4>").text(message.username),
+                        $("<p>").text(message.text)
+                    )
+            );
+        if (position !== "pre") {
+            $("#message-list").append(newMessageElement);
+        } else {
+            $("#message-list").prepend(newMessageElement);
+        }
+        $("#message-characters").text(`${this.localisationJSON.runtimeData.messageCharacters}0/500`);
         this.scrollToBottom();
-        document.getElementById("message-characters").innerText = `${this.localisationJSON.runtimeData.messageCharacters}0/500`;
     }
 
     createUserActiveElement (userData, position = "post", type = "joined") {
         let decryptedUsername = encrypter.decrypt(client.privateKey, userData.username);
-        let userJoinedWrapper = document.createElement("div");
-        userJoinedWrapper.classList.add("user-joined-wrapper");
-        let usernameWrapper = document.createElement("div");
-        usernameWrapper.classList.add("username-wrapper");
-        if (type !== "quit") {
-            usernameWrapper.innerText = `${decryptedUsername} ${this.localisationJSON.runtimeData.userAlerts.joined}`;
-        } else {
-            usernameWrapper.innerText = `${decryptedUsername} ${this.localisationJSON.runtimeData.userAlerts.quit}`;
-        }
-        userJoinedWrapper.appendChild(usernameWrapper);
+        let userJoinedMessage = this.localisationJSON.runtimeData.userAlerts.joined;
+        if (type === "quit") userJoinedMessage = this.localisationJSON.runtimeData.userAlerts.quit;
+        let userJoinedWrapper = $("<div>")
+            .addClass("user-joined-wrapper")
+            .append(
+                $("<div>")
+                    .addClass("username-wrapper")
+                    .text(`${decryptedUsername} ${userJoinedMessage}`)
+        );
         if (position !== "pre") {
-            document.getElementById("message-list").appendChild(userJoinedWrapper);
+            $("#message-list").append(userJoinedWrapper);
         } else {
-            document.getElementById("message-list").prepend(userJoinedWrapper);
+            $("#message-list").prepend(userJoinedWrapper);
         }
-        this.scrollToBottom();
     }
 
     scrollToBottom () {
-        document.getElementById("message-list").scrollTop = document.getElementById("message-list").scrollHeight;
+        $('#message-list').scrollTop($('#message-list')[0].scrollHeight);
     }
 
     localise () {
