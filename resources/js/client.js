@@ -13,6 +13,7 @@ class ClientEnvironment {
         this.clientConfig = fileTools.loadJson(this.clientConfigPath);
         this.privateKey = encKey.random(this.clientConfig.publicKeyLength);
         this.previousConnections = fileTools.loadJson(this.previousConnectionsPath);
+        this.localisationJSON = fileTools.loadJson(`./localisation/${this.clientConfig.language}.json`);
     }
 
     /**
@@ -97,7 +98,6 @@ class ClientEnvironment {
         this.transitionBetweenPages(["#kicked"], ["#login", "#recent-connections"]);
     }
 
-    // TODO - localise this part
     /**
      *
      */
@@ -122,11 +122,11 @@ class ClientEnvironment {
                     })
                     .append(
                         $("<p>")
-                            .text(`${this.localisationJSON.runtimeData.address}: ${connectionData.protocol + address}`),
+                            .html(`<strong>${this.localisationJSON.runtimeData.address}:</strong> ${connectionData.protocol + address}`),
                         $("<p>")
-                            .text(`${this.localisationJSON.runtimeData.username}: ${connectionData.username}`),
+                            .html(`<strong>${this.localisationJSON.runtimeData.username}:</strong> ${connectionData.username}`),
                         $("<p>")
-                            .text(`${this.localisationJSON.runtimeData.color}: ${connectionData.color}`)
+                            .html(`<strong>${this.localisationJSON.runtimeData.color}:</strong> ${connectionData.color}`)
                     )
             );
         }
@@ -215,7 +215,6 @@ class ClientEnvironment {
      *
      */
     localise () {
-        this.localisationJSON = fileTools.loadJson(`./localisation/${this.clientConfig.language}.json`);
         let localisationKeys = Object.keys(this.localisationJSON.launchData);
         localisationKeys.forEach(key => {
             let currentFocusElements = document.getElementsByName(key);
