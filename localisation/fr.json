@@ -85,6 +85,10 @@
             "joined": "a rejoint le serveur",
             "quit": "a quitté le serveur"
         },
-        "messageCharacters": "Caractères du message: "
+        "messageCharacters": "Caractères du message: ",
+        "reason": "Raison",
+        "address": "Adresse",
+        "username": "Nom d'utilisateur",
+        "color": "Couleur"
     }
 }
