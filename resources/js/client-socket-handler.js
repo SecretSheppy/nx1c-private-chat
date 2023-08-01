@@ -34,10 +34,11 @@ client.socket.on("user-advanced-to-active", (userData) => {
     client.createUserActiveElement(userData);
 });
 
+// TODO - localise this part
 client.socket.on("user-kicked-from-queue", (reason) => {
     client.socket.disconnect();
     client.transitionBetweenPages(["#password"], ["#kicked"]);
-    document.getElementById("kick-reason").innerText = "Reason: " + reason.reason;
+    $("kick-reason").text(`Reason: ${reason.reason}`);
 });
 
 client.socket.on("backlogged-message", (messageData) => {

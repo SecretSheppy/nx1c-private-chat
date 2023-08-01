@@ -32,7 +32,7 @@ class ClientEnvironment {
             $("head").append(
                 $("<script>")
                     .attr("type", "text/javascript")
-                    .attr("src", "resources/js/clientSocket.js")
+                    .attr("src", "resources/js/client-socket-handler.js")
             );
             this.slowOrNoConnection();
         }

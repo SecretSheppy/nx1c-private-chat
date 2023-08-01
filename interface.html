@@ -6,6 +6,7 @@
     <script type="text/javascript" src="node_modules/socket.io/client-dist/socket.io.js"></script>
     <script type="text/javascript" src="resources/js/client.js"></script>
     <script type="text/javascript" src="resources/jquery/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="resources/js/event-handlers.js" defer></script>
     <script type="text/javascript">
         const fileTools = require('./resources/modules/fileTools');
         const encrypter = require('./resources/modules/encrypter/');
@@ -21,13 +22,13 @@
             <img src="resources/images/logo.png">
             <p name="title-text-localisation"></p>
         </div>
-        <button class="button" onclick="$('#key-modifier').fadeToggle(200);" style="display: none;" id="key-button">
+        <button class="button" style="display: none;" id="key-button">
             <img src="resources/interface/key.png">
         </button>
-        <button class="button" onclick="nw.Window.get().minimize()">
+        <button id="minimize-button" class="button">
             <img src="resources/interface/line.png">
         </button>
-        <button class="button quit" onclick="nw.Window.get().close()">
+        <button id="exit-button" class="button quit">
             <img src="resources/interface/cross.png">
         </button>
     </div>
@@ -39,7 +40,7 @@
     <div class="inline-content-wrapper">
         <h4 name="private-key-prompt-localisation"></h4>
         <input name="private-key-field-localisation" id="private-key-field" type="text" autocomplete="off" required />
-        <input name="private-key-submit-localisation" type="submit" onclick="client.updatePrivateKey();">
+        <input name="private-key-submit-localisation" type="submit" id="private-key-submit-button">
     </div>
 </div>
 <!--Login Screen-->
@@ -54,7 +55,7 @@
 </div>
 <div class="login-wrapper" id="login">
     <div class="login">
-        <img src="resources/images/pc_logo.png">
+        <img src="resources/images/pc_logo.png" />
         <div class="label-wrapper">
             <label for="username" name="server-host-prompt-localisation"></label>
         </div>
@@ -71,32 +72,32 @@
         <input id="username" type="text" name="username-prompt-field-localisation" autocomplete="off" required />
         <p name="private-key-information-prompt" style="margin-top: 20px"></p>
         <div class="button-wrapper">
-            <input name="quit-button-localisation" type="reset" class="spacing" onclick="nw.Window.get().close();" />
-            <input name="connect-button-localisation" type="submit" onclick="client.connectToServer();" />
+            <input id="quit-button" name="quit-button-localisation" type="reset" class="spacing" />
+            <input id="connect-to-server-button" name="connect-button-localisation" type="submit" />
         </div>
     </div>
 </div>
 <div class="login-wrapper" id="password" style="display: none;">
     <div class="login">
-        <img src="resources/images/pc_logo.png">
+        <img src="resources/images/pc_logo.png" />
         <div class="label-wrapper">
             <label for="password-text" name="server-password-prompt-localisation"></label>
         </div>
         <input id="password-text" type="password" name="server-password-prompt-field-localisation" autocomplete="off" required />
         <div class="button-wrapper">
-            <input name="quit-button-localisation" type="reset" class="spacing" onclick="nw.Window.get().close();" />
-            <input name="connect-button-localisation" type="submit" onclick="client.submitServerPassword();" />
+            <input id="password-screen-quit-button" name="quit-button-localisation" type="reset" class="spacing" />
+            <input id="submit-password-button" name="connect-button-localisation" type="submit" />
         </div>
     </div>
 </div>
 <div class="login-wrapper" id="kicked" style="display: none;">
     <div class="login">
-        <img src="resources/images/pc_logo.png">
+        <img src="resources/images/pc_logo.png" />
         <p name="kicked-notification-localisation"></p>
         <p id="kick-reason"></p>
         <div class="button-wrapper">
-            <input name="quit-button-localisation" type="reset" class="spacing" onclick="nw.Window.get().close();" />
-            <input name="home-button-localisation" type="submit" onclick="client.showHome();" />
+            <input id="kicked-screen-quit-button" name="quit-button-localisation" type="reset" class="spacing" />
+            <input id="show-home-button" name="home-button-localisation" type="submit" />
         </div>
     </div>
 </div>
@@ -108,24 +109,9 @@
         <p id="message-characters" name="message-character-localisation"></p>
     </div>
     <div class="chat-box">
-        <input name="message-field-localisation" id="message-box" type="text">
-        <input name="send-button-localisation" type="submit" value="Send" onclick="client.sendMessage()">
+        <input name="message-field-localisation" id="message-box" type="text" />
+        <input id="send-message-button" name="send-button-localisation" type="submit" value="Send" />
     </div>
 </div>
 </body>
-<script type="text/javascript">
-    let messageBoxElement = document.getElementById("message-box");
-    let messageCharactersElement = document.getElementById("message-characters");
-    messageBoxElement.addEventListener("keydown", (event) => {
-        messageCharactersElement.innerText = `${client.localisationJSON.runtimeData.messageCharacters}${messageBoxElement.value.length}/500`;
-        if (messageBoxElement.value.length > 500) {
-            messageCharactersElement.style.color = "red";
-        } else {
-            messageCharactersElement.style.color = "var(--footer-bgcolor)";
-        }
-        if (event.key === "Enter") {
-            client.sendMessage();
-        }
-    });
-</script>
 </html>
