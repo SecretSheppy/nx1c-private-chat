@@ -1,3 +1,6 @@
+/**
+ *
+ */
 class ClientEnvironment {
 
     socket;
@@ -12,6 +15,10 @@ class ClientEnvironment {
         this.previousConnections = fileTools.loadJson(this.previousConnectionsPath);
     }
 
+    /**
+     *
+     * @returns {Promise<void>}
+     */
     async slowOrNoConnection () {
         setTimeout(() => {
             $("#alert-text")
@@ -21,6 +28,9 @@ class ClientEnvironment {
         }, 10000);
     }
 
+    /**
+     *
+     */
     connectToServer () {
         this.serverProtocol = $("#protocol").val();
         this.serverHost = $("#server-host").val();
@@ -38,6 +48,9 @@ class ClientEnvironment {
         }
     }
 
+    /**
+     *
+     */
     submitServerPassword () {
         this.socket.emit("advance-through-queue", {
             password: $("#password-text").val(),
@@ -46,6 +59,9 @@ class ClientEnvironment {
         });
     }
 
+    /**
+     *
+     */
     sendMessage () {
         let messageComposerElement = document.getElementById("message-box")
         if (messageComposerElement.value !== "") {
@@ -58,6 +74,11 @@ class ClientEnvironment {
         };
     }
 
+    /**
+     *
+     * @param currentPages
+     * @param targetPages
+     */
     transitionBetweenPages (currentPages, targetPages) {
         currentPages.forEach(page => {
             $(page).fadeOut(500);
@@ -69,11 +90,17 @@ class ClientEnvironment {
         }, 500);
     }
 
+    /**
+     *
+     */
     showHome () {
         this.transitionBetweenPages(["#kicked"], ["#login", "#recent-connections"]);
     }
 
     // TODO - localise this part
+    /**
+     *
+     */
     loadRecentConnections () {
         for (let address in this.previousConnections) {
             let connectionData = {
@@ -94,14 +121,20 @@ class ClientEnvironment {
                         this.connectToServer();
                     })
                     .append(
-                        $("<p>").text(`Address: ${connectionData.protocol + address}`),
-                        $("<p>").text(`Username: ${connectionData.username}`),
-                        $("<p>").text(`Color: ${connectionData.color}`)
+                        $("<p>")
+                            .text(`${this.localisationJSON.runtimeData.address}: ${connectionData.protocol + address}`),
+                        $("<p>")
+                            .text(`${this.localisationJSON.runtimeData.username}: ${connectionData.username}`),
+                        $("<p>")
+                            .text(`${this.localisationJSON.runtimeData.color}: ${connectionData.color}`)
                     )
             );
         }
     }
 
+    /**
+     *
+     */
     updatePrivateKey () {
         this.previousConnections[this.serverHost].privateKey = this.privateKey = $("#private-key-field").val();
         fileTools.saveJson(this.previousConnectionsPath, this.previousConnections);
@@ -111,6 +144,11 @@ class ClientEnvironment {
         }, 200);
     }
 
+    /**
+     *
+     * @param messageData
+     * @param position
+     */
     createMessageElement (messageData, position = "post") {
         let message = {
             username: encrypter.decrypt(client.privateKey, messageData.username),
@@ -141,6 +179,12 @@ class ClientEnvironment {
         this.scrollToBottom();
     }
 
+    /**
+     *
+     * @param userData
+     * @param position
+     * @param type
+     */
     createUserActiveElement (userData, position = "post", type = "joined") {
         let decryptedUsername = encrypter.decrypt(client.privateKey, userData.username);
         let userJoinedMessage = this.localisationJSON.runtimeData.userAlerts.joined;
@@ -160,10 +204,16 @@ class ClientEnvironment {
         this.scrollToBottom();
     }
 
+    /**
+     *
+     */
     scrollToBottom () {
         $('#message-list').scrollTop($('#message-list')[0].scrollHeight);
     }
 
+    /**
+     *
+     */
     localise () {
         this.localisationJSON = fileTools.loadJson(`./localisation/${this.clientConfig.language}.json`);
         let localisationKeys = Object.keys(this.localisationJSON.launchData);
