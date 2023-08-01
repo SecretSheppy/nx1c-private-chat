@@ -41,7 +41,6 @@ client.socket.on("user-kicked-from-queue", (reason) => {
 });
 
 client.socket.on("backlogged-message", (messageData) => {
-    console.log(messageData);
     switch (messageData.subjectToBroadcast) {
         case "message":
             client.createMessageElement(messageData.dataToBroadcast, "pre");
