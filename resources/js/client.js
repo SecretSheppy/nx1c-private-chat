@@ -157,6 +157,7 @@ class ClientEnvironment {
         } else {
             $("#message-list").prepend(userJoinedWrapper);
         }
+        this.scrollToBottom();
     }
 
     scrollToBottom () {
