@@ -27,6 +27,10 @@ client.socket.on("advance-client-ui", (data) => {
 });
 
 client.socket.on("message", (messageData) => {
+    if (!client.isFocused) {
+        nwWin.setBadgeLabel("1");
+        // TODO - fix this so it counts unread messages
+    }
     client.createMessageElement(messageData);
 });
 

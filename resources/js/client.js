@@ -8,6 +8,7 @@ class ClientEnvironment {
     clientColor = "";
     clientConfigPath = './configuration/client-config.json';
     previousConnectionsPath = './configuration/previous-connections.json';
+    isFocused = true;
 
     constructor () {
         this.clientConfig = fileTools.loadJson(this.clientConfigPath);
@@ -64,15 +65,15 @@ class ClientEnvironment {
      *
      */
     sendMessage () {
-        let messageComposerElement = document.getElementById("message-box")
-        if (messageComposerElement.value !== "") {
+        let messageComposerElement = document.getElementById("message-box");
+        if (messageComposerElement.value !== "" && messageComposerElement.value.length <= 500) {
             this.socket.emit("new message", {
                 username: encrypter.encrypt(this.privateKey, this.username),
                 message: encrypter.encrypt(this.privateKey, messageComposerElement.value),
                 color: encrypter.encrypt(this.privateKey, this.clientColor)
             });
             messageComposerElement.value = "";
-        };
+        }
     }
 
     /**

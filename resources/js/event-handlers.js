@@ -19,12 +19,12 @@ $("#key-button").on("click", function () {
 });
 
 $("#minimize-button").on("click", function () {
-    nw.Window.get().minimize();
+    nwWin.minimize();
 });
 
 $("#exit-button, #quit-button, #password-screen-quit-button, #kicked-screen-quit-button")
     .on("click", function () {
-        nw.Window.get().close();
+        nwWin.close();
     });
 
 $("#private-key-submit-button").on("click", function () {
@@ -46,3 +46,11 @@ $("#show-home-button").on("click", function () {
 $("#send-message-button").on("click", function () {
     client.sendMessage();
 });
+
+nwWin.on("blur", function () {
+    client.isFocused = false;
+});
+
+nwWin.on("focus", function () {
+    client.isFocused = true;
+})

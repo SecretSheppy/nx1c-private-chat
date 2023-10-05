@@ -14,7 +14,7 @@
         "toolbar": false,
         "width": 500,
         "height": 830,
-        "resizable": false,
+        "resizable": true,
         "position": "center",
         "transparent": true
     }
