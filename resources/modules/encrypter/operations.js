@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Performs a logical xor operation between two binary strings
  * @param {string} key

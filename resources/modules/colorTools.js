@@ -1,3 +1,5 @@
+"use strict";
+
 exports.generateRandomHexColor = function () {
     let hexValues = "0123456789ABCDEF";
     let color = "#";

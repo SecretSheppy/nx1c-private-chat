@@ -1,3 +1,5 @@
+"use strict";
+
 const fs = require('fs');
 const mTree = require('./mTree');
 
@@ -15,4 +17,8 @@ exports.loadMessageTree = function (messageTreePath) {
 
 exports.appendToRawMessageTree = function (messageTreePath, data) {
     fs.appendFileSync(messageTreePath, JSON.stringify(data) + "\n");
+}
+
+exports.isDefined = function (data) {
+    return !(typeof data === "undefined");
 }

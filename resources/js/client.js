@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  *
  */
@@ -9,6 +11,7 @@ class ClientEnvironment {
     clientConfigPath = './configuration/client-config.json';
     previousConnectionsPath = './configuration/previous-connections.json';
     isFocused = true;
+    unreadMessages = 0;
 
     constructor () {
         this.clientConfig = fileTools.loadJson(this.clientConfigPath);
@@ -178,6 +181,7 @@ class ClientEnvironment {
         }
         $("#message-characters").text(`${this.localisationJSON.runtimeData.messageCharacters}0/500`);
         this.scrollToBottom();
+        this.markUnreadMessages();
     }
 
     /**
@@ -229,6 +233,16 @@ class ClientEnvironment {
                 });
             }
         });
+    }
+
+    markUnreadMessages () {
+        if (this.isFocused) {
+            nwWin.setBadgeLabel("");
+            this.unreadMessages = 0;
+        } else {
+            this.unreadMessages += 1;
+            nwWin.setBadgeLabel(`${this.unreadMessages}`);
+        }
     }
 
 }

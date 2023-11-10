@@ -1,3 +1,5 @@
+"use strict";
+
 const binary = require('./binary');
 const key = require('./key');
 const operations = require('./operations');

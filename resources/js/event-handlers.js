@@ -1,3 +1,5 @@
+"use strict";
+
 $("#message-box").on("keyup", function () {
     $("#message-characters")
         .text(`${client.localisationJSON.runtimeData.messageCharacters}${$(this).val().length}/500`)
@@ -53,4 +55,5 @@ nwWin.on("blur", function () {
 
 nwWin.on("focus", function () {
     client.isFocused = true;
+    client.markUnreadMessages();
 })

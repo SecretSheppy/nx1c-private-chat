@@ -1,3 +1,5 @@
+"use strict";
+
 const socketIO = require('socket.io');
 const express = require('express');
 const http = require('http');
@@ -15,7 +17,7 @@ const io = socketIO(server);
 app.use(cors());
 
 const config = ft.loadJson("./configuration/server-config.json");
-const log = new logger.Logger(config.name, config.version, config.port);
+const log = new logger.Logger(config);
 const serverRoom = new room.Room(log, config, io);
 
 io.on("connection", (socket) => {
@@ -59,4 +61,4 @@ server.listen(
         log.success(`listening on port ${config.port}`);
         log.success(`local address: http://${ip.address()}:${config.port}/`);
     }
-)
+);

@@ -1,3 +1,5 @@
+"use strict";
+
 const fileTools = require('./fileTools');
 const mTree = require('./mTree');
 
@@ -100,5 +102,36 @@ exports.Room = class {
             this.kickUserFromActive(socketId);
         }
         this.logServerUsers();
+    }
+
+    newUserJoined (socket) {
+        let passwordData = { password: true };
+        if (this.config.password === null) {
+            passwordData.password = false;
+        }
+        socket.emit("joined-server-queue", passwordData);
+        this.addUserToQueue(socket.id);
+    }
+
+    get messageTreeLength () {
+        return this.messageTree.messageTree.length;
+    }
+
+    loadMessageBacklog (socket, quantity) {
+        for (let i = 0; i < quantity; i++) {
+            socket.emit(
+                "backlogged-message",
+                this.messageTree.messageTree[this.messageTreeLength - i]
+            );
+        }
+    }
+
+    passwordAttemptHandler (socket) {
+        if (this.incrementUserPasswordAttempts(socket.id) === "kicked") {
+            socket.emit(
+                "user-kicked-from-queue",
+                { reason: "Failed to enter correct password" }
+            );
+        }
     }
 }

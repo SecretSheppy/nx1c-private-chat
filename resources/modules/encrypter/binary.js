@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * Converts a string of text characters into its corresponding binary values.
  * @param {string} string

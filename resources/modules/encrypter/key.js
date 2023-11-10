@@ -1,3 +1,5 @@
+"use strict";
+
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz0123456789";
 
 /**
