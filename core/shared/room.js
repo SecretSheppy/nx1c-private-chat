@@ -41,7 +41,7 @@ exports.Room = class {
 
     incrementUserPasswordAttempts (socketId) {
         this.queue[this.getIndexOfUserBySocket(socketId, this.queue)].failedLoginAttemptCounter += 1;
-        if (this.queue[this.getIndexOfUserBySocket(socketId, this.queue)].failedLoginAttemptCounter == this.config.passwordAttempts) {
+        if (this.queue[this.getIndexOfUserBySocket(socketId, this.queue)].failedLoginAttemptCounter === this.config.passwordAttempts) {
             this.kickUserFromQueue(socketId);
             this.logger.warning("User kicked from queue (Failed to present correct password)");
             return "kicked";

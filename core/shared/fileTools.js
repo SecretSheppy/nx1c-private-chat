@@ -4,7 +4,7 @@ const fs = require('fs');
 const mTree = require('./mTree');
 
 exports.loadJson = function (jsonPath) {
-    return JSON.parse(fs.readFileSync(jsonPath));
+    return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 }
 
 exports.saveJson = function (jsonPath, jsonData) {
