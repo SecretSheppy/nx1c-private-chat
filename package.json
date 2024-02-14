@@ -8,7 +8,7 @@
     },
     "main": "interface.html",
     "window": {
-        "icon": "resources/images/logo.png",
+        "icon": "gfx/icons/logo.png",
         "frame": false,
         "toolbar": false,
         "width": 500,
