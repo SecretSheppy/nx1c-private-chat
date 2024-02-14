@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="styles/main.css">
     <script type="text/javascript" src="node_modules/socket.io/client-dist/socket.io.js"></script>
-    <script type="text/javascript" src="resources/js/client.js"></script>
-    <script type="text/javascript" src="resources/jquery/jquery-3.7.0.min.js"></script>
-    <script type="text/javascript" src="resources/js/event-handlers.js" defer></script>
+    <script type="text/javascript" src="core/client/client.js"></script>
+    <script type="text/javascript" src="external/jquery/jquery-3.7.0.min.js"></script>
+    <script type="text/javascript" src="core/client/event-handlers.js" defer></script>
     <script type="text/javascript">
         const nwWin = nw.Window.get();
-        const fileTools = require('./resources/modules/fileTools');
-        const encrypter = require('./resources/modules/encrypter/');
-        const encKey = require('./resources/modules/encrypter/key');
+        const fileTools = require('./core/shared/fileTools');
+        const encrypter = require('./core/shared/encrypter');
+        const encKey = require('./core/shared/encrypter/key');
         const client = new ClientEnvironment();
     </script>
     <title name="title-text-localisation"></title>
@@ -20,17 +20,17 @@
 <div class="title-bar-wrapper">
     <div class="title-bar">
         <div class="draggable-area">
-            <img src="resources/images/logo.png">
+            <img src="gfx/icons/logo.png">
             <p name="title-text-localisation"></p>
         </div>
         <button class="button" style="display: none;" id="key-button">
-            <img src="resources/interface/key.png">
+            <img src="gfx/icons/key.png">
         </button>
         <button id="minimize-button" class="button">
-            <img src="resources/interface/line.png">
+            <img src="gfx/icons/line.png">
         </button>
         <button id="exit-button" class="button quit">
-            <img src="resources/interface/cross.png">
+            <img src="gfx/icons/cross.png">
         </button>
     </div>
 </div>
@@ -56,7 +56,7 @@
 </div>
 <div class="login-wrapper" id="login">
     <div class="login">
-        <img src="resources/images/pc_logo.png" />
+        <img src="gfx/images/full_logo.png" />
         <div class="label-wrapper">
             <label for="username" name="server-host-prompt-localisation"></label>
         </div>
@@ -80,7 +80,7 @@
 </div>
 <div class="login-wrapper" id="password" style="display: none;">
     <div class="login">
-        <img src="resources/images/pc_logo.png" />
+        <img src="gfx/images/full_logo.png" />
         <div class="label-wrapper">
             <label for="password-text" name="server-password-prompt-localisation"></label>
         </div>
@@ -93,7 +93,7 @@
 </div>
 <div class="login-wrapper" id="kicked" style="display: none;">
     <div class="login">
-        <img src="resources/images/pc_logo.png" />
+        <img src="gfx/images/full_logo.png" />
         <p name="kicked-notification-localisation"></p>
         <p id="kick-reason"></p>
         <div class="button-wrapper">
