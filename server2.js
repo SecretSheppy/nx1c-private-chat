@@ -5,11 +5,11 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 
-const logger = require('./resources/modules/logger');
-const ft = require('./resources/modules/fileTools');
-const ct = require('./resources/modules/colorTools');
-const room = require('./resources/modules/room');
-const ip = require('./resources/modules/getip');
+const logger = require('./core/shared/logger');
+const ft = require('./core/shared/fileTools');
+const ct = require('./core/shared/colorTools');
+const room = require('./core/shared/room');
+const ip = require('./core/shared/getip');
 
 const app = express();
 const server = http.createServer(app);
