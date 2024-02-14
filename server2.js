@@ -4,12 +4,12 @@ const socketIO = require('socket.io');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const ip = require('ip');
 
 const logger = require('./resources/modules/logger');
 const ft = require('./resources/modules/fileTools');
 const ct = require('./resources/modules/colorTools');
 const room = require('./resources/modules/room');
+const ip = require('./resources/modules/getip');
 
 const app = express();
 const server = http.createServer(app);

@@ -6,7 +6,7 @@ const logger = require('./resources/modules/logger');
 const fileTools = require('./resources/modules/fileTools');
 const room = require('./resources/modules/room');
 const colorTools = require('./resources/modules/colorTools');
-const ip = require('ip');
+const ip = require('./resources/modules/getip');
 
 const app = express();
 const server = http.createServer(app);
